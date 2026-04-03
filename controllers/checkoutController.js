@@ -1,6 +1,20 @@
 import Stripe from 'stripe';
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+function getStripe() {
+  const rawKey = process.env.STRIPE_SECRET_KEY;
+
+  if (!rawKey) {
+    throw new Error('Falta STRIPE_SECRET_KEY');
+  }
+
+  const cleanKey = rawKey.trim();
+
+  if (!cleanKey.startsWith('sk_')) {
+    throw new Error('STRIPE_SECRET_KEY no tiene formato válido');
+  }
+
+  return new Stripe(cleanKey);
+}
 
 const PRICE_IDS = {
   basico: process.env.STRIPE_PRICE_BASICO,
@@ -9,6 +23,7 @@ const PRICE_IDS = {
 
 export const createCheckoutSession = async (req, res) => {
   try {
+    const stripe = getStripe();
     const user = req.session.user;
     const company = req.tenant;
 

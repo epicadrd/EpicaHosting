@@ -7,9 +7,8 @@ export const subscribe = async (req, res) => {
     const { email, plan } = req.body;
 
     const priceMap = {
-      basico: process.env.STRIPE_PRICE_BASIC,
-      profesional: process.env.STRIPE_PRICE_PRO,
-      avanzado: process.env.STRIPE_PRICE_ADVANCED
+      basico: process.env.STRIPE_PRICE_BASICO,
+      profesional: process.env.STRIPE_PRICE_PROFESIONAL
     };
 
     const session = await stripe.checkout.sessions.create({
