@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <%- include('partials/head') %>
+</head>
+<body>
+  <%- include('partials/navbar', { appName }) %>
+
+  <main class="page-section">
+    <div class="container checkout-grid">
+      <section class="checkout-form-card">
+        <span class="eyebrow">Suscripción</span>
+        <h1>Completa tus datos</h1>
+        <p>Luego conectaremos esta vista con Stripe para el cobro automático mensual.</p>
+
+        <form action="/billing/subscribe" method="POST" class="checkout-form">
+          <input type="hidden" name="plan" value="<%= plan.slug %>" />
+
+          <div class="form-group">
+            <label for="fullName">Nombre completo</label>
+            <input id="fullName" name="fullName" type="text" placeholder="Tu nombre" required />
+          </div>
+
+          <div class="form-group">
+            <label for="email">Correo electrónico</label>
+            <input id="email" name="email" type="email" placeholder="tu@correo.com" required />
+          </div>
+
+          <div class="form-group">
+            <label for="businessName">Nombre del negocio</label>
+            <input id="businessName" name="businessName" type="text" placeholder="Empresa o proyecto" />
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-block">Continuar</button>
+        </form>
+      </section>
+
+      <aside class="summary-card">
+        <span class="eyebrow">Resumen</span>
+        <h2><%= plan.name %></h2>
+        <div class="price">$<%= plan.price %><span>/mes</span></div>
+        <p><%= plan.description %></p>
+        <ul>
+          <% plan.features.forEach(feature => { %>
+            <li><%= feature %></li>
+          <% }) %>
+        </ul>
+      </aside>
+    </div>
+  </main>
+
+  <%- include('partials/footer', { appName }) %>
+</body>
+</html>

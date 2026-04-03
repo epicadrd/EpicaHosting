@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title><%= title || 'Dashboard' %> | <%= appName || 'Epic Hosting' %></title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/styles.css"/>
+  <link rel="stylesheet" href="/css/dashboard.css"/>
+</head>
+<body>
+
+<header class="navbar">
+  <div class="container nav-wrap">
+    <a href="/" class="brand">
+      <span class="brand-mark">⚡</span>
+      <span><%= appName %></span>
+    </a>
+
+    <nav class="nav-links">
+      <a href="/">Inicio</a>
+      <a href="/dashboard/plans">Planes</a>
+
+      <form action="/logout" method="POST">
+        <button class="nav-cta">Cerrar sesión</button>
+      </form>
+    </nav>
+  </div>
+</header>
+
+<main class="dashboard-main">
+<section class="dashboard-section">
+<div class="dashboard-shell">
+
+<div class="dashboard-topbar">
+  <div>
+    <span class="kicker">
+      <span class="kicker-dot"></span>
+      Panel principal
+    </span>
+
+    <h1>Bienvenido, <span><%= user?.name || 'Usuario' %></span></h1>
+    <p><%= heroMessage %></p>
+  </div>
+
+  <div class="topbar-actions">
+    <a href="/dashboard/plans" class="btn btn-secondary">Ver planes</a>
+  </div>
+</div>
+
+<div class="dashboard-grid">
+
+<section class="panel panel-hero">
+  <div class="panel-glow glow-a"></div>
+  <div class="panel-glow glow-b"></div>
+
+  <div class="panel-head">
+    <div>
+      <span class="panel-badge">Resumen de tu cuenta</span>
+      <h2><%= company?.name || 'Tu empresa' %></h2>
+      <p>Consulta el estado de tu cuenta, tu plan y tu facturación.</p>
+    </div>
+
+    <div class="status-stack">
+      <span class="tone-badge tone-<%= companyStatusTone %>">
+        Cuenta <%= companyStatus %>
+      </span>
+
+      <span class="tone-badge tone-<%= billingTone %>">
+        Pago <%= billingLabel %>
+      </span>
+    </div>
+  </div>
+
+  <div class="stat-grid">
+    <% cards.forEach(card => { %>
+      <article class="stat-card">
+        <span><%= card.label %></span>
+        <strong><%= card.value %></strong>
+        <small><%= card.helper %></small>
+      </article>
+    <% }) %>
+  </div>
+</section>
+
+<section class="panel">
+  <div class="panel-head-simple">
+    <span class="panel-badge">Acciones</span>
+    <h3>Accesos rápidos</h3>
+  </div>
+
+  <div class="action-grid">
+    <% quickActions.forEach(action => { %>
+      <a href="<%= action.href %>" class="action-card action-<%= action.theme %>">
+        <strong><%= action.title %></strong>
+        <p><%= action.description %></p>
+      </a>
+    <% }) %>
+  </div>
+</section>
+
+<section class="panel">
+  <div class="panel-head-simple">
+    <span class="panel-badge">Plan</span>
+    <h3>Tu plan actual</h3>
+  </div>
+
+    
+
+  <div  class="feature-callout <%= hasPlan ? 'feature-callout-ok' : 'feature-callout-pending' %>">
+    
+    <% if (hasPlan) { %>
+      <strong>Tienes el plan <%= planLabel %></strong>
+
+      <% if (company?.status === 'canceling') { %>
+        <p>Tu suscripción se cancelará al final del período.</p>
+
+        <form style="margin-top: 20px;" action="/subscription/reactivate" method="POST">
+          <button class="btn btn-primary">Reactivar suscripción</button>
+        </form>
+
+      <% } else { %>
+        <p>Tu servicio está activo y funcionando correctamente.</p>
+
+        <% if (company?.stripe_subscription_id) { %>
+          <div style="display:grid; gap:10px;">
+            <a style="margin-top: 20px;" href="/dashboard/billing" class="btn btn-secondary">Ver facturas y tarjeta</a>
+
+            <form action="/subscription/cancel" method="POST"
+              onsubmit="return confirm('¿Seguro que deseas cancelar la suscripción?');">
+              <button class="btn btn-secondary">Cancelar suscripción</button>
+            </form>
+          </div>
+        <% } %>
+
+      <% } %>
+
+    <% } else { %>
+      <strong>No tienes un plan activo</strong>
+      <p>Selecciona un plan para comenzar.</p>
+      <a style="margin-top: 20px;" href="/dashboard/plans" class="btn btn-primary">Elegir plan</a>
+    <% } %>
+
+  </div>
+</section>
+
+
+
+<section class="panel">
+  <div class="panel-head-simple">
+    <span class="panel-badge">Cuenta</span>
+    <h3>Información</h3>
+  </div>
+
+  <div class="info-list">
+    <div class="info-row">
+      <span>Empresa</span>
+      <strong><%= company?.name %></strong>
+    </div>
+
+    <div class="info-row">
+      <span>Correo</span>
+      <strong><%= user?.email %></strong>
+    </div>
+  </div>
+</section>
+
+</div>
+</div>
+</section>
+</main>
+
+</body>
+</html>

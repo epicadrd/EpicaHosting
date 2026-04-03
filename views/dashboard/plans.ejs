@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Planes | <%= appName || 'Epic Hosting' %></title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="/css/styles.css" />
+  <link rel="stylesheet" href="/css/dashboard.css" />
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <header class="navbar">
+    <div class="container nav-wrap">
+      <a href="/dashboard" class="brand">
+        <span class="brand-mark">⚡</span>
+        <span><%= appName || 'Epic Hosting' %></span>
+      </a>
+
+      <nav class="nav-links">
+        <a href="/dashboard">Dashboard</a>
+        <a href="/dashboard/plans">Planes</a>
+
+        <form action="/logout" method="POST" style="display:inline;">
+          <button type="submit" class="nav-cta nav-cta-btn">Cerrar sesión</button>
+        </form>
+      </nav>
+    </div>
+  </header>
+
+  <main class="dashboard-main">
+    <section class="dashboard-section">
+      <div class="dashboard-shell">
+
+        <!-- HEADER -->
+        <div class="dashboard-topbar">
+          <div>
+            <span class="kicker">
+              <span class="kicker-dot"></span>
+              Selección de plan
+            </span>
+
+            <h1>
+              Elige el plan ideal para
+              <span><%= company?.name || 'tu proyecto' %></span>
+            </h1>
+
+            <p>
+              Selecciona un plan para continuar con la activación de tu servicio.
+            </p>
+          </div>
+
+          <div class="topbar-actions">
+            <a href="/dashboard" class="btn btn-secondary">Volver</a>
+          </div>
+        </div>
+
+        <!-- ESTADO ACTUAL -->
+        <section class="panel panel-hero" style="margin-bottom: 20px;">
+          <div class="panel-glow glow-a"></div>
+          <div class="panel-glow glow-b"></div>
+
+          <div class="panel-head">
+            <div>
+              <span class="panel-badge">Estado actual</span>
+
+              <h2>
+                <%= currentPlanLabel || 'Sin plan activo' %>
+              </h2>
+
+              <p>
+                <% if (company?.plan) { %>
+                  Ya tienes un plan seleccionado. Puedes cambiarlo antes de completar el pago.
+                <% } else { %>
+                  Tu cuenta está lista. Solo falta seleccionar un plan para continuar.
+                <% } %>
+              </p>
+            </div>
+
+            <div class="status-stack">
+              <span class="tone-badge tone-<%= company?.plan ? 'success' : 'warning' %>">
+                <%= company?.plan ? 'Plan seleccionado' : 'Sin plan activo' %>
+              </span>
+            </div>
+          </div>
+        </section>
+
+        <!-- PLANES -->
+        <section class="section" id="pricing" style="padding: 0;">
+          <div class="pricing-grid">
+
+            <% plans.forEach(plan => { %>
+              <article class="price-card <%= plan.popular ? 'popular' : '' %>">
+
+                <% if (plan.popular) { %>
+                  <span class="popular-badge">Más popular</span>
+                <% } %>
+
+                <% if (company?.plan === plan.slug) { %>
+                  <span class="popular-badge" style="top: 54px; background: rgba(34,197,94,.15); color:#bbf7d0;">
+                    Tu plan actual
+                  </span>
+                <% } %>
+
+                <div class="card-label">Plan mensual</div>
+                <h3><%= plan.name %></h3>
+                <p class="card-description"><%= plan.description %></p>
+
+                <div class="price">
+                  <% if (plan.custom) { %>
+                    <strong>Custom</strong>
+                  <% } else { %>
+                    <strong>$<%= plan.price %></strong>
+                    <span>/mes</span>
+                  <% } %>
+                </div>
+
+                <div class="divider"></div>
+
+                <ul class="price-features">
+                  <% plan.features.forEach(feature => { %>
+                    <li>
+                      <span class="check">✓</span>
+                      <span><%= feature %></span>
+                    </li>
+                  <% }) %>
+                </ul>
+
+                <!-- BOTÓN CORRECTO -->
+                <% if (plan.custom) { %>
+
+                  <a href="/" class="btn btn-block <%= plan.popular ? 'btn-primary' : 'btn-secondary' %>">
+                    Contactar
+                  </a>
+
+                <% } else { %>
+
+                  <form action="/planes/select" method="POST">
+                    <input type="hidden" name="plan" value="<%= plan.slug %>">
+                    <button type="submit" class="btn btn-block <%= plan.popular ? 'btn-primary' : 'btn-secondary' %>">
+                      Seleccionar plan
+                    </button>
+                  </form>
+
+                <% } %>
+
+                <p class="card-foot">
+                  Cancelación flexible. Pago mensual recurrente.
+                </p>
+
+              </article>
+            <% }) %>
+
+          </div>
+        </section>
+
+      </div>
+    </section>
+  </main>
+
+</body>
+</html>

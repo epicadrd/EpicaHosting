@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <%- include('partials/head') %>
+
+  <style>
+    .success-wrap{
+      min-height: calc(100vh - 160px);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding: 48px 16px;
+    }
+
+    .success-card{
+      width:100%;
+      max-width:720px;
+      padding:40px 32px;
+      border-radius:26px;
+      border:1px solid rgba(255,255,255,.08);
+      background:linear-gradient(180deg, rgba(20,24,47,.88), rgba(10,14,30,.94));
+      box-shadow:0 30px 80px rgba(0,0,0,.35);
+      text-align:center;
+      position:relative;
+      overflow:hidden;
+    }
+
+    .success-card::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:
+        radial-gradient(circle at top right, rgba(139,92,246,.18), transparent 30%),
+        linear-gradient(135deg, rgba(255,255,255,.05), transparent 40%);
+      pointer-events:none;
+    }
+
+    .state-icon{
+      width:50px;
+      height:50px;
+      border-radius:16px;
+      display:grid;
+      place-items:center;
+      margin:0 auto 16px;
+      font-size:1.3rem;
+      z-index:1;
+      position:relative;
+      border:1px solid transparent;
+    }
+
+    .state-icon.success{
+      background:linear-gradient(135deg, rgba(34,197,94,.25), rgba(16,185,129,.2));
+      border-color:rgba(34,197,94,.25);
+    }
+
+    .state-icon.error{
+      background:linear-gradient(135deg, rgba(239,68,68,.20), rgba(245,158,11,.14));
+      border-color:rgba(239,68,68,.22);
+    }
+
+    .state-badge{
+      display:inline-block;
+      padding:8px 16px;
+      border-radius:999px;
+      font-weight:800;
+      font-size:.85rem;
+      margin-bottom:16px;
+      z-index:1;
+      position:relative;
+      border:1px solid transparent;
+    }
+
+    .state-badge.success{
+      background:rgba(34,197,94,.12);
+      color:#bbf7d0;
+      border-color:rgba(34,197,94,.25);
+    }
+
+    .state-badge.error{
+      background:rgba(239,68,68,.12);
+      color:#fecaca;
+      border-color:rgba(239,68,68,.25);
+    }
+
+    .success-card h1{
+      font-size:2.4rem;
+      margin-bottom:12px;
+      letter-spacing:-.03em;
+      z-index:1;
+      position:relative;
+    }
+
+    .success-card p{
+      color:#94a3b8;
+      line-height:1.7;
+      margin-bottom:26px;
+      z-index:1;
+      position:relative;
+    }
+
+    .code-box{
+      background:rgba(255,255,255,.04);
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:18px;
+      padding:20px;
+      text-align:left;
+      margin-top:10px;
+      position:relative;
+      z-index:1;
+    }
+
+    .code-label{
+      font-size:.85rem;
+      font-weight:700;
+      color:#cbd5f5;
+      margin-bottom:10px;
+      display:block;
+    }
+
+    .code-row{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+
+    .code-value{
+      flex:1;
+      padding:14px;
+      border-radius:14px;
+      background:rgba(255,255,255,.03);
+      border:1px solid rgba(255,255,255,.08);
+      font-weight:700;
+      word-break:break-all;
+      font-size:.95rem;
+    }
+
+    .copy-btn{
+      padding:0 16px;
+      border:none;
+      border-radius:14px;
+      background:linear-gradient(135deg, var(--primary), #7c3aed);
+      color:white;
+      font-weight:700;
+      cursor:pointer;
+      min-height:48px;
+    }
+
+    .copy-btn:hover{
+      opacity:.9;
+    }
+
+    .helper{
+      font-size:.85rem;
+      margin-top:8px;
+      color:#94a3b8;
+    }
+
+    .alert-box{
+      background:rgba(239,68,68,.08);
+      border:1px solid rgba(239,68,68,.18);
+      border-radius:18px;
+      padding:18px;
+      text-align:left;
+      color:#fecaca;
+      line-height:1.7;
+      position:relative;
+      z-index:1;
+      margin-top:8px;
+    }
+
+    .actions{
+      margin-top:28px;
+      display:flex;
+      gap:12px;
+      justify-content:center;
+      flex-wrap:wrap;
+      position:relative;
+      z-index:1;
+    }
+
+    .btn-secondary-custom{
+      background:rgba(255,255,255,.05);
+      border:1px solid rgba(255,255,255,.08);
+      color:#fff;
+    }
+  </style>
+</head>
+
+<body>
+  <%- include('partials/navbar', { appName }) %>
+
+  <main class="page-section">
+    <div class="container success-wrap">
+      <div class="success-card">
+
+        <% if (paymentVerified) { %>
+          <div class="state-icon success">✓</div>
+          <span class="state-badge success">Pago confirmado</span>
+
+          <h1>Pago realizado exitosamente</h1>
+
+          <p>
+            Tu suscripción fue procesada correctamente.
+            Guarda este código y envíalo a tu desarrollador de confianza.
+          </p>
+
+          <div class="code-box">
+            <span class="code-label">Código de confirmación</span>
+
+            <div class="code-row">
+              <div class="code-value" id="code">
+                <%= typeof subscriptionCode !== 'undefined' && subscriptionCode ? subscriptionCode : 'No disponible' %>
+              </div>
+
+              <button class="copy-btn" type="button" onclick="copyCode()">Copiar</button>
+            </div>
+
+            <div class="helper">
+              Envíale este código a tu desarrollador de confianza para que pueda verificar y publicar tu aplicación.
+            </div>
+          </div>
+        <% } else { %>
+          <div class="state-icon error">!</div>
+          <span class="state-badge error">Validación pendiente</span>
+
+          <h1>No pudimos confirmar tu pago todavía</h1>
+
+          <p>
+            Tu pago no pudo validarse completamente en este momento.
+          </p>
+
+          <div class="alert-box">
+            Intenta nuevamente más tarde.  
+            Si el cobro sí se realizó, no repitas el pago de inmediato hasta verificarlo.
+            También puedes compartir tu correo o el código de suscripción si llegaste a recibirlo.
+          </div>
+
+          <% if (typeof subscriptionCode !== 'undefined' && subscriptionCode) { %>
+            <div class="code-box">
+              <span class="code-label">Código detectado</span>
+
+              <div class="code-row">
+                <div class="code-value" id="code">
+                  <%= subscriptionCode %>
+                </div>
+
+                <button class="copy-btn" type="button" onclick="copyCode()">Copiar</button>
+              </div>
+
+              <div class="helper">
+                Si ves este código, compártelo para ayudarte a revisar manualmente.
+              </div>
+            </div>
+          <% } %>
+        <% } %>
+
+        <div class="actions">
+          <a href="/dashboard" class="btn btn-secondary-custom">Volver al inicio</a>
+          <a href="/" class="btn btn-primary">Ir a la web</a>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <%- include('partials/footer', { appName }) %>
+
+  <script>
+    function copyCode(){
+      const el = document.getElementById('code');
+      const text = el ? el.innerText.trim() : '';
+
+      if(!text || text === 'No disponible'){
+        alert('No hay código disponible');
+        return;
+      }
+
+      navigator.clipboard.writeText(text)
+        .then(() => alert('Código copiado'))
+        .catch(() => alert('No se pudo copiar'));
+    }
+  </script>
+</body>
+</html>

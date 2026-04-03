@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Epic Hosting | Hosting & Soporte</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/styles.css" />
+</head>
+<body>
+
+  <header class="navbar">
+    <div class="container nav-wrap">
+      <a href="/" class="brand">
+        <span class="brand-mark">⚡</span>
+        <span><%= appName %></span>
+      </a>
+
+      <nav class="nav-links">
+        <a href="/">Inicio</a>
+        <a href="#pricing">Planes</a>
+        <a href="/login" class="nav-cta">Empezar</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+        <div class="container hero-grid">
+                    <div class="hero-copy">
+            <span class="kicker">
+                <span class="kicker-dot"></span>
+                Infraestructura, soporte y mantenimiento gestionado
+            </span>
+
+            <h1>
+                Infraestructura y soporte técnico para
+                <span class="gradient">aplicaciones en producción</span>
+            </h1>
+
+            <p>
+                Hosting gestionado, mantenimiento continuo y monitoreo para sistemas activos. 
+                Mantén tus proyectos estables, seguros y funcionando sin interrupciones.
+            </p>
+
+            <div class="hero-actions">
+                <a href="#pricing" class="btn btn-primary">Explorar precios</a>
+            </div>
+
+            <div class="trust-row">
+                <span class="trust-pill">Pago mensual</span>
+                <span class="trust-pill">Soporte técnico</span>
+                <span class="trust-pill">Infraestructura segura</span>
+            </div>
+            </div>
+
+        <div class="hero-panel">
+          <div class="glow glow-1"></div>
+          <div class="glow glow-2"></div>
+
+          <div class="panel-card">
+            <div class="mini-topbar">
+              <span class="mini-dot"></span>
+              <span class="mini-dot"></span>
+              <span class="mini-dot"></span>
+            </div>
+
+            <div class="summary-stat">
+              <div class="stat-box">
+                <span>Plan recomendado</span>
+                <strong>Profesional</strong>
+              </div>
+              <div class="stat-box">
+                <span>Cobro mensual</span>
+                <strong>Automático</strong>
+              </div>
+              <div class="stat-box">
+                <span>Soporte</span>
+                <strong>Prioritario</strong>
+              </div>
+            </div>
+
+            <ul class="feature-list">
+              <li>
+                <span class="feature-icon">✓</span>
+                Hosting del sistema con infraestructura estable
+              </li>
+              <li>
+                <span class="feature-icon">✓</span>
+                Soporte técnico 24/7
+              </li>
+              <li>
+                <span class="feature-icon">✓</span>
+                Mantenimiento y monitoreo continuo
+              </li>
+              <li>
+                <span class="feature-icon">✓</span>
+                Backups y continuidad del servicio
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="pricing">
+      <div class="container">
+        <div class="section-head">
+          <span class="eyebrow">Planes</span>
+          <h2>Elige el plan ideal para tu proyecto</h2>
+          <p>
+            Todos los planes incluyen infraestructura, mantenimiento técnico y soporte mensual.
+          </p>
+        </div>
+
+        <div class="pricing-grid">
+          <% plans.forEach(plan => { %>
+            <article class="price-card <%= plan.popular ? 'popular' : '' %>">
+              <% if (plan.popular) { %>
+                <span class="popular-badge">Más popular</span>
+              <% } %>
+
+              <div class="card-label">Plan mensual</div>
+              <h3><%= plan.name %></h3>
+              <p class="card-description"><%= plan.description %></p>
+
+             <div class="price">
+                <% if (plan.custom) { %>
+                    <strong>Custom</strong>
+                <% } else { %>
+                    <strong>$<%= plan.price %></strong>
+                    <span>/mes</span>
+                <% } %>
+            </div>
+
+              <div class="divider"></div>
+
+              <ul class="price-features">
+                <% plan.features.forEach(feature => { %>
+                  <li>
+                    <span class="check">✓</span>
+                    <span><%= feature %></span>
+                  </li>
+                <% }) %>
+              </ul>
+
+              <a href="/login" class="btn btn-block <%= plan.popular ? 'btn-primary' : 'btn-secondary' %>">
+                <%= plan.custom ? 'Contactar' : 'Seleccionar plan' %>
+              </a>
+
+              <p class="card-foot">Cancelación flexible. Pago mensual recurrente.</p>
+            </article>
+          <% }) %>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-wrap">
+      <p>© 2026 <%= appName %>. Todos los derechos reservados.</p>
+      <div class="footer-links">
+        <a href="/">Inicio</a>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>
