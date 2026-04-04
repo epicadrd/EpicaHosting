@@ -33,6 +33,7 @@ export const home = (req, res) => {
       custom: false,
       features: [
         'Incluye mayor capacidad de uso mensual',
+        'Hasta 3 cambios de diseño al mes',
         'Hasta 4 vCPU compartidos por servicio',
         'Hasta 4 GB RAM por servicio',
         'Hasta 20 GB de almacenamiento',
