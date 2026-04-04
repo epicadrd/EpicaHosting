@@ -27,7 +27,7 @@ export const home = (req, res) => {
     {
       name: 'Profesional',
       slug: 'profesional',
-      price: 25,
+      price: 30,
       description: 'Para aplicaciones en producción con usuarios activos y mayor demanda operativa.',
       popular: true,
       custom: false,
